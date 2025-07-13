@@ -2,25 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title id="pageTitle">Norythm</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Monoton&display=swap');
-    * { box-sizing: border-box; }
-    html, body {
+    
+    * { 
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Orbitron', sans-serif;
-      color: #281c8c;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      min-width: 320px;
     }
     
+    html, body {
+      font-family: 'Orbitron', sans-serif;
+      color: #281c8c;
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+      position: relative;
+      background-color: #000;
+      scroll-behavior: smooth;
+    }
+
+    /* Container رئيسي للتمرير */
+    .main-container {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      position: relative;
+    }
+
+    /* تأثير TV القديم */
     .bg-old-tv {
       position: fixed;
       top: 0;
@@ -36,12 +51,13 @@
       display: none;
       animation: tvFlicker 0.1s infinite alternate;
     }
-    
+
     @keyframes tvFlicker {
       0% { opacity: 0.9; }
       100% { opacity: 1; }
     }
-    
+
+    /* طبقة التعتيم الأولية */
     .pre-entry-blur {
       position: fixed;
       top: 0;
@@ -52,7 +68,8 @@
       z-index: 998;
       display: block;
     }
-    
+
+    /* فيديو الخلفية */
     #bgVideo {
       position: fixed;
       top: 50%;
@@ -64,41 +81,18 @@
       height: auto;
       object-fit: cover;
       z-index: -2;
+      -webkit-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
-    
-    @media (max-aspect-ratio: 9/16) {
-      #bgVideo {
-        width: auto;
-        height: 100%;
-      }
-    }
-    
-    @media (min-aspect-ratio: 16/9) {
-      #bgVideo {
-        width: 100%;
-        height: auto;
-      }
-    }
-    
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent,
-        transparent 2px,
-        rgba(255, 255, 255, 0.02) 2px,
-        rgba(255, 255, 255, 0.02) 4px
-      );
-      z-index: 1;
-    }
-    
+
+    /* زر الدخول */
     .entry-text {
-      position: absolute;
-      top: 50%; left: 50%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       color: white;
       font-size: 24px;
@@ -116,11 +110,14 @@
       user-select: none;
       white-space: nowrap;
     }
+
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.3; }
     }
-    .main {
+
+    /* المحتوى الرئيسي */
+    .content {
       display: none;
       flex-direction: column;
       align-items: center;
@@ -128,16 +125,17 @@
       padding: 30px;
       z-index: 5;
       animation: slideIn 1.2s ease forwards;
-      width: auto;
-      max-width: 90vw;
-      min-width: 300px;
-      overflow-wrap: break-word;
-      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 80px auto;
     }
+
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(80px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* الصورة الشخصية */
     .avatar {
       width: 180px;
       height: 180px;
@@ -147,15 +145,20 @@
       transition: transform 0.3s ease;
       object-fit: cover;
     }
+
     .avatar:hover {
       transform: scale(1.05);
     }
+
+    /* اسم المستخدم */
     .username-container {
       position: relative;
       display: inline-block;
       z-index: 10;
       margin-top: 10px;
+      text-align: center;
     }
+
     .username {
       font-size: 36px;
       font-weight: bold;
@@ -165,12 +168,32 @@
       user-select: none;
       position: relative;
       z-index: 10;
-      white-space: nowrap;
       transition: text-shadow 0.3s ease;
     }
+
     .username:hover {
       text-shadow: 0 0 10px #281c8c;
     }
+
+    /* تأثير الكتابة */
+    .typing-effect {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid #281c8c;
+      animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #281c8c }
+    }
+
+    /* الوصف */
     .description {
       color: white;
       text-align: center;
@@ -183,9 +206,12 @@
       margin-top: 5px;
       max-width: 80%;
     }
+
     .description:hover {
       transform: scale(1.05);
     }
+
+    /* الروابط */
     .links {
       display: flex;
       flex-direction: column;
@@ -194,6 +220,7 @@
       width: 100%;
       align-items: center;
     }
+
     .links a {
       display: flex;
       align-items: center;
@@ -209,11 +236,14 @@
       border: 1px solid rgba(255,255,255,0.1);
       font-size: 16px;
     }
+
     .links a:hover {
       background-color: rgba(255,255,255,0.15);
       transform: scale(1.05);
       color: #281c8c;
     }
+
+    /* عناصر التحكم بالصوت */
     .audio-container {
       position: fixed;
       top: 20px;
@@ -232,11 +262,13 @@
       cursor: pointer;
       border: 1px solid rgba(40, 28, 140, 0.5);
     }
+
     .audio-container:hover {
       width: 180px;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 12px;
     }
+
     .audio-container img {
       width: 32px;
       height: 32px;
@@ -246,10 +278,9 @@
       flex-shrink: 0;
       z-index: 2;
     }
+
     input[type=range] {
       -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
       width: 0;
       height: 4px;
       border-radius: 5px;
@@ -263,6 +294,7 @@
       background-position: left bottom;
       z-index: 2;
     }
+
     .audio-container:hover input[type=range] {
       width: 100px;
       opacity: 1;
@@ -270,9 +302,9 @@
       background-size: 200% 100%;
       background-position: right bottom;
     }
+
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      appearance: none;
       width: 14px;
       height: 14px;
       background: white;
@@ -285,30 +317,8 @@
       transform: translateY(-50%);
       z-index: 10;
     }
-    input[type=range]::-moz-range-thumb {
-      width: 14px;
-      height: 14px;
-      background: white;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid #281c8c;
-      transition: all 0.3s ease;
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-    }
-    input[type=range]:focus {
-      outline: none;
-    }
-    input[type=range]::-webkit-slider-runnable-track {
-      height: 4px;
-      border-radius: 5px;
-    }
-    input[type=range]::-moz-range-track {
-      height: 4px;
-      border-radius: 5px;
-    }
+
+    /* التذييل (الوقت والموقع) */
     .footer {
       margin-top: 30px;
       width: 100%;
@@ -318,12 +328,14 @@
       padding: 0 12px;
       position: relative;
     }
+
     .location-clock-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
     }
+
     .footer .location {
       display: flex;
       align-items: center;
@@ -334,16 +346,20 @@
       font-family: 'Orbitron', sans-serif;
       transition: all 0.3s ease;
     }
+
     .footer .location:hover {
       color: white;
     }
+
     .footer .location img {
       filter: brightness(1.5);
       transition: all 0.3s ease;
     }
+
     .footer .location:hover img {
       filter: brightness(2);
     }
+
     .clock {
       color: #d3d3d3;
       font-size: 22px;
@@ -352,270 +368,364 @@
       letter-spacing: 1px;
       transition: all 0.3s ease;
     }
+
     .clock:hover {
       color: white;
     }
-    .typing-effect {
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 2px solid #281c8c;
-      animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+
+    /* تأثير الثلج */
+    #snowCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
     }
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
-    @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: #281c8c }
+
+    /* تعديلات للشاشات الصغيرة */
+    @media (max-width: 768px) {
+      #bgVideo {
+        height: 100vh;
+        width: auto;
+      }
+
+      .content {
+        padding: 20px 15px;
+        margin: 60px 0 30px;
+      }
+
+      .avatar {
+        width: 150px;
+        height: 150px;
+      }
+
+      .username {
+        font-size: 28px !important;
+      }
+
+      .description {
+        font-size: 16px !important;
+        max-width: 95% !important;
+      }
+
+      .links a {
+        width: 95% !important;
+        padding: 10px 12px;
+      }
+
+      .footer .location {
+        font-size: 20px;
+      }
+
+      .clock {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="bg-old-tv" id="bgOldTv"></div>
-  <div class="pre-entry-blur" id="preEntryBlur"></div>
-  
-  <video autoplay muted loop playsinline id="bgVideo" preload="auto">
-    <source src="video/military-anime-girl-smoking-moewalls-com.mp4" type="video/mp4">
-  </video>
-  
-  <div id="particles-js"></div>
-  <div class="entry-text" onclick="enterSite()">Click to Enter</div>
-  
-  <div class="main" id="mainContent">
-    <img src="https://i.postimg.cc/SKM2hCf6/21f57ed365f9dd7c5e50e8b4d03102e2.webp" class="avatar" alt="avatar">
-    <div class="username-container" style="position: relative;">
-      <div class="username typing-effect" id="usernameText">Norythm</div>
-      <canvas id="usernameParticles" style="position:absolute; top:0; left:0; pointer-events:none; z-index:9;"></canvas>
-    </div>
-    <div class="description">"Lack of attention and lack of appreciation perpetuates the feeling of loneliness and depression"</div>
-    <div class="links">
-      <a href="https://discord.com/users/462423647743901699" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" width="20" alt="discord">Discord
-      </a>
-      <a href="https://open.spotify.com/user/31cj2qrmiqk7mqlrmxpmxz23qtmu" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111624.png" width="20" alt="spotify">Spotify
-      </a>
-      <a href="https://github.com/Norythm" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" width="20" alt="github">GitHub
-      </a>
-      <a href="https://www.roblox.com/users/2631470509/profile" target="_blank">
-        <img src="https://simpleicons.org/icons/roblox.svg" width="20" alt="roblox" style="filter: brightness(0) invert(1);"> Roblox
-      </a>
-      <a href="https://steamcommunity.com/profiles/76561199547438865/" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png" width="20" alt="steam">Steam
-      </a>
-    </div>
-    <div class="footer">
-      <div class="location-clock-container">
-        <div class="clock" id="clock"></div>
-        <div class="location">
-          <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" width="20" alt="location">
-          Egypt
+  <div class="main-container">
+    <div class="bg-old-tv" id="bgOldTv"></div>
+    <div class="pre-entry-blur" id="preEntryBlur"></div>
+    
+    <video autoplay muted loop playsinline id="bgVideo" preload="auto">
+      <source src="video/military-anime-girl-smoking-moewalls-com.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    
+    <div class="entry-text" onclick="enterSite()">Click to Enter</div>
+    
+    <div class="content" id="mainContent">
+      <img src="https://i.postimg.cc/SKM2hCf6/21f57ed365f9dd7c5e50e8b4d03102e2.webp" class="avatar" alt="avatar">
+      <div class="username-container">
+        <div class="username typing-effect" id="usernameText">Norythm</div>
+        <canvas id="usernameParticles"></canvas>
+      </div>
+      <div class="description">"Lack of attention and lack of appreciation perpetuates the feeling of loneliness and depression"</div>
+      <div class="links">
+        <a href="https://discord.com/users/462423647743901699" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" width="20" alt="discord">Discord
+        </a>
+        <a href="https://open.spotify.com/user/31cj2qrmiqk7mqlrmxpmxz23qtmu" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/2111/2111624.png" width="20" alt="spotify">Spotify
+        </a>
+        <a href="https://github.com/Norythm" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" width="20" alt="github">GitHub
+        </a>
+        <a href="https://www.roblox.com/users/2631470509/profile" target="_blank">
+          <img src="https://simpleicons.org/icons/roblox.svg" width="20" alt="roblox" style="filter: brightness(0) invert(1);"> Roblox
+        </a>
+        <a href="https://steamcommunity.com/profiles/76561199547438865/" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png" width="20" alt="steam">Steam
+        </a>
+      </div>
+      <div class="footer">
+        <div class="location-clock-container">
+          <div class="clock" id="clock"></div>
+          <div class="location">
+            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" width="20" alt="location">
+            Egypt
+          </div>
         </div>
       </div>
     </div>
+    
+    <div class="audio-container" title="Toggle Audio">
+      <img src="https://cdn-icons-png.flaticon.com/512/727/727269.png" id="audioIcon" alt="audio icon">
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" aria-label="Volume control">
+    </div>
+    
+    <canvas id="snowCanvas"></canvas>
   </div>
-  
-  <div class="audio-container" title="Toggle Audio">
-    <img src="https://cdn-icons-png.flaticon.com/512/727/727269.png" id="audioIcon" onclick="toggleAudio()" alt="audio icon">
-    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" aria-label="Volume control">
-  </div>
-  
+
   <audio id="bgAudio" loop>
     <source src="assets/music/Farazi-Dobro-Vecer-_Remastered_.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
   </audio>
 
   <script>
-    const usernameText = document.getElementById('usernameText');
-    const canvas = document.getElementById('usernameParticles');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      const rect = usernameText.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      canvas.style.top = '0px';
-      canvas.style.left = '0px';
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    const particles = [];
-    const maxParticles = 70;
-
-    function randomRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    function createParticle() {
-      return {
-        x: randomRange(0, canvas.width),
-        y: randomRange(0, canvas.height),
-        radius: randomRange(0.5, 1.2),
-        speedX: randomRange(-0.15, 0.15),
-        speedY: randomRange(-0.15, 0.15),
-        opacity: randomRange(0.2, 0.6),
-        opacityChange: 0.005 * (Math.random() < 0.5 ? 1 : -1),
-        color: '#281c8c'
-      };
+    // تهيئة الفيديو
+    function initVideo() {
+      const video = document.getElementById('bgVideo');
+      const entryText = document.querySelector('.entry-text');
+      
+      // محاولة التشغيل التلقائي
+      const playPromise = video.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // إذا فشل التشغيل التلقائي
+          entryText.textContent = "Tap to Load Video";
+          entryText.onclick = function() {
+            video.play()
+              .then(() => enterSite())
+              .catch(e => console.log("Video play failed:", e));
+          };
+        });
+      }
+      
+      // ضبط حجم الفيديو
+      function adjustVideoSize() {
+        const windowRatio = window.innerWidth / window.innerHeight;
+        video.style.width = windowRatio > 16/9 ? '100%' : 'auto';
+        video.style.height = windowRatio > 16/9 ? 'auto' : '100vh';
+      }
+      
+      window.addEventListener('resize', adjustVideoSize);
+      adjustVideoSize();
     }
 
-    for (let i = 0; i < maxParticles; i++) {
-      particles.push(createParticle());
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        p.opacity += p.opacityChange;
+    // تأثير الجسيمات على اسم المستخدم
+    function initUsernameParticles() {
+      const usernameText = document.getElementById('usernameText');
+      const canvas = document.getElementById('usernameParticles');
+      const ctx = canvas.getContext('2d');
+      
+      function resizeCanvas() {
+        const rect = usernameText.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '9';
+      }
+      
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      
+      const particles = [];
+      const maxParticles = 70;
+      
+      function createParticle() {
+        return {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 0.7 + 0.5,
+          speedX: Math.random() * 0.3 - 0.15,
+          speedY: Math.random() * 0.3 - 0.15,
+          opacity: Math.random() * 0.4 + 0.2,
+          opacityChange: 0.005 * (Math.random() < 0.5 ? 1 : -1),
+          color: '#281c8c'
+        };
+      }
+      
+      for (let i = 0; i < maxParticles; i++) {
+        particles.push(createParticle());
+      }
+      
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        if (p.opacity > 0.6) p.opacity = 0.6;
-        if (p.opacity < 0.2) p.opacity = 0.2;
+        particles.forEach(p => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.opacity += p.opacityChange;
+          
+          if (p.opacity > 0.6) p.opacity = 0.6;
+          if (p.opacity < 0.2) p.opacity = 0.2;
+          
+          if (p.x < 0 || p.x > canvas.width) p.speedX *= -0.5;
+          if (p.y < 0 || p.y > canvas.height) p.speedY *= -0.5;
+          
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(40, 28, 140, ${p.opacity})`;
+          ctx.fill();
+        });
         
-        if (p.x < 0 || p.x > canvas.width) p.speedX *= -0.5;
-        if (p.y < 0 || p.y > canvas.height) p.speedY *= -0.5;
-        
+        requestAnimationFrame(animateParticles);
+      }
+      
+      animateParticles();
+    }
+
+    // تأثير الثلج
+    function initSnowEffect() {
+      const canvas = document.getElementById('snowCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      
+      const snowflakes = Array.from({ length: 100 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 3 + 1,
+        d: Math.random() + 1,
+      }));
+      
+      let angle = 0;
+      
+      function drawSnow() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(40, 28, 140, ${p.opacity})`;
+        
+        snowflakes.forEach(f => {
+          ctx.moveTo(f.x, f.y);
+          ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+        });
+        
         ctx.fill();
-      });
-      requestAnimationFrame(animateParticles);
+        updateSnow();
+      }
+      
+      function updateSnow() {
+        angle += 0.01;
+        
+        snowflakes.forEach(f => {
+          f.y += Math.pow(f.d, 2) + 1;
+          f.x += Math.sin(angle) * 2;
+          
+          if (f.y > canvas.height) {
+            f.y = -10;
+            f.x = Math.random() * canvas.width;
+          }
+        });
+      }
+      
+      function animateSnow() {
+        drawSnow();
+        requestAnimationFrame(animateSnow);
+      }
+      
+      animateSnow();
     }
-    animateParticles();
 
-    const audio = document.getElementById('bgAudio');
-    const audioIcon = document.getElementById('audioIcon');
-    const volumeSlider = document.getElementById('volumeSlider');
-    let isAudioPlaying = false;
+    // التحكم بالصوت
+    function initAudioControls() {
+      const audio = document.getElementById('bgAudio');
+      const audioIcon = document.getElementById('audioIcon');
+      const volumeSlider = document.getElementById('volumeSlider');
+      let isAudioPlaying = false;
+      
+      function toggleAudio() {
+        if (isAudioPlaying) {
+          audio.pause();
+          audioIcon.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23281c8c'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>";
+          isAudioPlaying = false;
+        } else {
+          audio.play()
+            .then(() => {
+              audioIcon.src = "https://cdn-icons-png.flaticon.com/512/727/727269.png";
+              isAudioPlaying = true;
+            })
+            .catch(e => console.log("Audio play failed:", e));
+        }
+        audioIcon.style.filter = "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(745%) hue-rotate(227deg) brightness(87%) contrast(93%)";
+      }
+      
+      audioIcon.onclick = toggleAudio;
+      
+      volumeSlider.addEventListener('input', () => {
+        audio.volume = volumeSlider.value;
+        const percent = volumeSlider.value * 100;
+        volumeSlider.style.background = `linear-gradient(to right, #281c8c 0%, #281c8c ${percent}%, #686868 ${percent}%, #686868 100%)`;
+      });
+    }
 
+    // الساعة
+    function initClock() {
+      const clock = document.getElementById("clock");
+      
+      function updateClock() {
+        const now = new Date();
+        let hours = now.getHours();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        clock.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+      }
+      
+      setInterval(updateClock, 1000);
+      updateClock();
+    }
+
+    // دخول الموقع
     function enterSite() {
       document.getElementById('preEntryBlur').style.display = 'none';
       document.getElementById('bgOldTv').style.display = 'block';
       document.querySelector('.entry-text').style.display = 'none';
+      
       const main = document.getElementById('mainContent');
       main.style.display = 'flex';
       main.classList.add('show');
-      audio.play();
-      isAudioPlaying = true;
-      document.querySelector('.audio-container').style.display = 'flex';
-      document.getElementById('bgVideo').play();
-    }
-
-    function toggleAudio() {
-      if (isAudioPlaying) {
-        audio.pause();
-        audioIcon.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23281c8c'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>";
-        isAudioPlaying = false;
-      } else {
-        audio.play();
-        audioIcon.src = "https://cdn-icons-png.flaticon.com/512/727/727269.png";
-        isAudioPlaying = true;
-      }
-      audioIcon.style.filter = "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(745%) hue-rotate(227deg) brightness(87%) contrast(93%)";
-    }
-
-    volumeSlider.addEventListener('input', () => {
-      audio.volume = volumeSlider.value;
-      const val = volumeSlider.value;
-      const percent = val * 100;
-      volumeSlider.style.background = `linear-gradient(to right, #281c8c 0%, #281c8c ${percent}%, #686868 ${percent}%, #686868 100%)`;
-    });
-
-    function updateClock() {
-      const clock = document.getElementById("clock");
-      const now = new Date();
-      let hours = now.getHours();
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const seconds = now.getSeconds().toString().padStart(2, '0');
-      clock.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    const snowCanvas = document.createElement('canvas');
-    snowCanvas.id = 'snowCanvas';
-    snowCanvas.style.position = 'fixed';
-    snowCanvas.style.top = '0';
-    snowCanvas.style.left = '0';
-    snowCanvas.style.pointerEvents = 'none';
-    snowCanvas.style.zIndex = '2';
-    document.body.appendChild(snowCanvas);
-
-    const snowCtx = snowCanvas.getContext('2d');
-    let width = snowCanvas.width = window.innerWidth;
-    let height = snowCanvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      width = snowCanvas.width = window.innerWidth;
-      height = snowCanvas.height = window.innerHeight;
-    });
-
-    const snowflakes = Array.from({ length: 100 }).map(() => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 3 + 1,
-      d: Math.random() + 1,
-    }));
-
-    function drawSnow() {
-      snowCtx.clearRect(0, 0, width, height);
-      snowCtx.fillStyle = "white";
-      snowCtx.beginPath();
-      for (let i = 0; i < snowflakes.length; i++) {
-        const f = snowflakes[i];
-        snowCtx.moveTo(f.x, f.y);
-        snowCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
-      }
-      snowCtx.fill();
-      updateSnow();
-    }
-
-    let angle = 0;
-    function updateSnow() {
-      angle += 0.01;
-      for (let i = 0; i < snowflakes.length; i++) {
-        const f = snowflakes[i];
-        f.y += Math.pow(f.d, 2) + 1;
-        f.x += Math.sin(angle) * 2;
-        if (f.y > height) {
-          f.y = -10;
-          f.x = Math.random() * width;
-        }
-      }
-    }
-
-    function animateSnow() {
-      drawSnow();
-      requestAnimationFrame(animateSnow);
-    }
-    animateSnow();
-    
-    function adjustVideoSize() {
-      const video = document.getElementById('bgVideo');
-      const windowRatio = window.innerWidth / window.innerHeight;
-      const videoRatio = 16 / 9;
       
-      if (windowRatio > videoRatio) {
-        video.style.width = '100%';
-        video.style.height = 'auto';
-      } else {
-        video.style.width = 'auto';
-        video.style.height = '100%';
-      }
+      document.querySelector('.audio-container').style.display = 'flex';
+      
+      // تشغيل الصوت بعد التفاعل
+      const audio = document.getElementById('bgAudio');
+      audio.play().catch(e => console.log("Audio play failed:", e));
     }
-    
-    window.addEventListener('resize', adjustVideoSize);
-    window.addEventListener('load', adjustVideoSize);
-    
-    document.addEventListener('click', function() {
-      document.getElementById('bgVideo').play();
+
+    // تهيئة جميع المكونات عند تحميل الصفحة
+    window.addEventListener('DOMContentLoaded', () => {
+      initVideo();
+      initUsernameParticles();
+      initSnowEffect();
+      initAudioControls();
+      initClock();
+      
+      // إضافة حدث لمس إضافي لضمان التشغيل على الموبايل
+      document.addEventListener('click', function() {
+        const video = document.getElementById('bgVideo');
+        video.play().catch(e => console.log("Video play failed:", e));
+      }, { once: true });
+      
+      // معالجة خطأ تحميل الفيديو
+      document.getElementById('bgVideo').addEventListener('error', function() {
+        console.error("Failed to load video. Using fallback background.");
+        document.body.style.background = "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)";
+      });
     });
   </script>
 </body>
