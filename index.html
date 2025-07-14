@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title id="pageTitle">Norythm</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Monoton&display=swap');
@@ -14,6 +13,7 @@
       font-family: 'Orbitron', sans-serif;
       color: #281c8c;
       height: 100vh;
+      width: 100vw;
       overflow: hidden;
       display: flex;
       justify-content: center;
@@ -67,17 +67,53 @@
       z-index: -2;
     }
     
-    @media (max-aspect-ratio: 9/16) {
+    @media (max-width: 768px) {
       #bgVideo {
         width: auto;
         height: 100%;
       }
-    }
-    
-    @media (min-aspect-ratio: 16/9) {
-      #bgVideo {
-        width: 100%;
-        height: auto;
+      
+      .main {
+        padding: 15px !important;
+        max-width: 95vw !important;
+      }
+      
+      .avatar {
+        width: 120px !important;
+        height: 120px !important;
+      }
+      
+      .username {
+        font-size: 24px !important;
+        white-space: normal !important;
+      }
+      
+      .description {
+        font-size: 14px !important;
+        max-width: 95% !important;
+      }
+      
+      .links a {
+        width: 100% !important;
+        max-width: 280px !important;
+        padding: 10px 12px !important;
+        font-size: 14px !important;
+      }
+      
+      .footer .location {
+        font-size: 18px !important;
+      }
+      
+      .clock {
+        font-size: 16px !important;
+      }
+      
+      .entry-text {
+        font-size: 18px !important;
+        padding: 10px 16px !important;
+        white-space: normal !important;
+        width: auto !important;
+        max-width: 90% !important;
       }
     }
     
@@ -500,10 +536,10 @@
       const main = document.getElementById('mainContent');
       main.style.display = 'flex';
       main.classList.add('show');
-      audio.play();
+      audio.play().catch(e => console.log("Audio play failed:", e));
       isAudioPlaying = true;
       document.querySelector('.audio-container').style.display = 'flex';
-      document.getElementById('bgVideo').play();
+      document.getElementById('bgVideo').play().catch(e => console.log("Video play failed:", e));
     }
 
     function toggleAudio() {
@@ -512,7 +548,7 @@
         audioIcon.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23281c8c'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>";
         isAudioPlaying = false;
       } else {
-        audio.play();
+        audio.play().catch(e => console.log("Audio play failed:", e));
         audioIcon.src = "https://cdn-icons-png.flaticon.com/512/727/727269.png";
         isAudioPlaying = true;
       }
@@ -616,8 +652,21 @@
     window.addEventListener('load', adjustVideoSize);
     
     document.addEventListener('click', function() {
-      document.getElementById('bgVideo').play();
+      document.getElementById('bgVideo').play().catch(e => console.log("Video play failed:", e));
     });
+    
+    // Handle mobile viewport scaling
+    function handleViewport() {
+      let viewport = document.querySelector("meta[name=viewport]");
+      if (window.innerWidth <= 768) {
+        viewport.setAttribute("content", "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no");
+      } else {
+        viewport.setAttribute("content", "width=device-width, initial-scale=1.0");
+      }
+    }
+    
+    window.addEventListener('resize', handleViewport);
+    handleViewport();
   </script>
 </body>
 </html>
