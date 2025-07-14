@@ -12,14 +12,13 @@
       padding: 0;
       font-family: 'Orbitron', sans-serif;
       color: #281c8c;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
+      overflow-x: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
       min-width: 320px;
+      min-height: 100vh;
     }
     
     .bg-old-tv {
@@ -137,8 +136,14 @@
       }
       
       .main {
-        padding: 15px !important;
+        padding: 20px 15px !important;
         max-width: 95vw !important;
+        height: auto;
+        margin-bottom: 40px;
+      }
+      
+      body {
+        overflow-y: auto;
       }
       
       .avatar {
@@ -191,6 +196,10 @@
       
       .visitor-count {
         font-size: 18px;
+      }
+      
+      .links {
+        margin-bottom: 20px;
       }
     }
     
@@ -247,6 +256,7 @@
       min-width: 300px;
       overflow-wrap: break-word;
       position: relative;
+      margin-bottom: 40px;
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(80px); }
@@ -496,7 +506,6 @@
   <div id="particles-js"></div>
   <div class="entry-text" onclick="enterSite()">Click to Enter</div>
   
-  <!-- عداد الزوار الجديد -->
   <div class="eye-counter">
     <div class="eye-container">
       <div class="eye">
@@ -552,20 +561,16 @@
   </audio>
 
   <script>
-    // نظام عد الزوار المحسن
     function getVisitorId() {
       let visitorId = localStorage.getItem('visitorId');
       
       if (!visitorId) {
-        // إنشاء معرف فريد للزائر
         visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9) + 
                    '_' + new Date().getTime();
         localStorage.setItem('visitorId', visitorId);
         
-        // زيادة العداد فقط إذا كان الزائر جديداً
         incrementVisitorCount();
       } else {
-        // عرض العدد الحالي بدون زيادة
         showVisitorCount();
       }
       
@@ -573,14 +578,12 @@
     }
 
     function incrementVisitorCount() {
-      // نستخدم sessionStorage لمنع العد عند التحديث
       if (!sessionStorage.getItem('visited')) {
         let count = localStorage.getItem('visitorCount') || 0;
         count = parseInt(count) + 1;
         localStorage.setItem('visitorCount', count);
         sessionStorage.setItem('visited', 'true');
         
-        // عرض العدد مع تأثير العد
         animateCounter(count);
       }
     }
@@ -605,36 +608,29 @@
       }, 50);
     }
 
-    // متابعة حركة الماوس للعين - النسخة المحسنة
     document.addEventListener('mousemove', (e) => {
       const pupil = document.querySelector('.pupil');
       const eye = document.querySelector('.eye');
       const rect = eye.getBoundingClientRect();
       
-      // مركز العين
       const eyeCenterX = rect.left + rect.width / 2;
       const eyeCenterY = rect.top + rect.height / 2;
       
-      // حساب المسافة بين الماوس ومركز العين مع تحديد الحدود
       const mouseX = Math.min(Math.max(e.clientX, rect.left), rect.right);
       const mouseY = Math.min(Math.max(e.clientY, rect.top), rect.bottom);
       
-      // حساب النسبة المئوية للحركة داخل حدود العين
       const percentX = (mouseX - eyeCenterX) / (rect.width / 3);
       const percentY = (mouseY - eyeCenterY) / (rect.height / 3);
       
-      // تحديد الحد الأقصى لحركة البؤبؤ (بحيث لا يخرج من العين)
       const maxMoveX = 7;
       const maxMoveY = 5;
       
-      // حساب الحركة مع تطبيق الحدود
       const moveX = percentX * maxMoveX;
       const moveY = percentY * maxMoveY;
       
-      pupil.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+      pupil.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)`;
     });
 
-    // تهيئة العداد عند التحميل
     document.addEventListener('DOMContentLoaded', () => {
       getVisitorId();
     });
@@ -830,7 +826,6 @@
       document.getElementById('bgVideo').play().catch(e => console.log("Video play failed:", e));
     });
     
-    // Handle mobile viewport scaling
     function handleViewport() {
       let viewport = document.querySelector("meta[name=viewport]");
       if (window.innerWidth <= 768) {
@@ -840,8 +835,25 @@
       }
     }
     
+    function setupMobileScrolling() {
+      if (window.innerWidth <= 768) {
+        document.body.style.overflowY = 'auto';
+        document.body.style.height = 'auto';
+        
+        const video = document.getElementById('bgVideo');
+        video.style.position = 'fixed';
+        video.style.height = '100%';
+        video.style.width = 'auto';
+        
+        const mainContent = document.getElementById('mainContent');
+        mainContent.style.minHeight = 'calc(100vh - 40px)';
+      }
+    }
+
     window.addEventListener('resize', handleViewport);
-    handleViewport();
+    window.addEventListener('load', handleViewport);
+    window.addEventListener('load', setupMobileScrolling);
+    window.addEventListener('resize', setupMobileScrolling);
   </script>
 </body>
 </html>
