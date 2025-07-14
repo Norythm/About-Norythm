@@ -131,8 +131,13 @@
     
     @media (max-width: 768px) {
       #bgVideo {
-        width: auto;
+        width: 100%;
         height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        top: 0;
+        left: 0;
+        transform: none;
       }
       
       .main {
@@ -567,19 +572,27 @@
       try {
         video.play().catch(e => console.log("Video play attempt failed:", e));
         
-        // إعادة ضبط حجم الفيديو
-        const windowRatio = window.innerWidth / window.innerHeight;
-        const videoRatio = 16 / 9;
-        
-        if (windowRatio > videoRatio) {
+        if (window.innerWidth <= 768) {
+          // وضع خاص للجوالات
           video.style.width = '100%';
-          video.style.height = 'auto';
-        } else {
-          video.style.width = 'auto';
           video.style.height = '100%';
+          video.style.objectFit = 'cover';
+          video.style.objectPosition = 'center center';
+          video.style.left = '0';
+          video.style.top = '0';
+          video.style.transform = 'none';
+        } else {
+          // وضع خاص لأجهزة الكمبيوتر
+          video.style.width = 'auto';
+          video.style.height = 'auto';
+          video.style.minWidth = '100%';
+          video.style.minHeight = '100%';
+          video.style.left = '50%';
+          video.style.top = '50%';
+          video.style.transform = 'translate(-50%, -50%)';
         }
         
-        // إضافة fallback للجوالات
+        // إعدادات خاصة للجوالات
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
           video.setAttribute('playsinline', '');
           video.setAttribute('muted', '');
@@ -680,10 +693,19 @@
       // ضبط الفيديو
       adjustVideoSize();
       
-      // محاولة تشغيل الفيديو على الجوالات
+      // إعادة ضبط الفيديو عند تغيير حجم النافذة
+      window.addEventListener('resize', adjustVideoSize);
+      window.addEventListener('orientationchange', adjustVideoSize);
+      
+      // محاولة تشغيل الفيديو على الجوالات عند النقر
       if (/Mobi|Android/i.test(navigator.userAgent)) {
         document.addEventListener('click', function() {
-          document.getElementById('bgVideo').play().catch(e => console.log("Mobile video play failed:", e));
+          document.getElementById('bgVideo').play()
+            .then(() => {
+              console.log("Video started successfully on mobile");
+              adjustVideoSize(); // إعادة ضبط الحجم بعد التشغيل
+            })
+            .catch(e => console.log("Mobile video play failed:", e));
         }, {once: true});
       }
     });
