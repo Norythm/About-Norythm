@@ -131,13 +131,8 @@
     
     @media (max-width: 768px) {
       #bgVideo {
-        width: 100%;
+        width: auto;
         height: 100%;
-        object-fit: cover;
-        object-position: center center;
-        top: 0;
-        left: 0;
-        transform: none;
       }
       
       .main {
@@ -511,7 +506,7 @@
   <div id="particles-js"></div>
   <div class="entry-text" onclick="enterSite()">Click to Enter</div>
   
-  <div class="eye-counter" style="display: flex;">
+  <div class="eye-counter">
     <div class="eye-container">
       <div class="eye">
         <div class="pupil"></div>
@@ -566,80 +561,31 @@
   </audio>
 
   <script>
-    // حل المشكلة 1: ضبط الفيديو ليعمل على جميع الأجهزة
-    function adjustVideoSize() {
-      const video = document.getElementById('bgVideo');
-      try {
-        video.play().catch(e => console.log("Video play attempt failed:", e));
-        
-        if (window.innerWidth <= 768) {
-          // وضع خاص للجوالات
-          video.style.width = '100%';
-          video.style.height = '100%';
-          video.style.objectFit = 'cover';
-          video.style.objectPosition = 'center center';
-          video.style.left = '0';
-          video.style.top = '0';
-          video.style.transform = 'none';
-        } else {
-          // وضع خاص لأجهزة الكمبيوتر
-          video.style.width = 'auto';
-          video.style.height = 'auto';
-          video.style.minWidth = '100%';
-          video.style.minHeight = '100%';
-          video.style.left = '50%';
-          video.style.top = '50%';
-          video.style.transform = 'translate(-50%, -50%)';
-        }
-        
-        // إعدادات خاصة للجوالات
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-          video.setAttribute('playsinline', '');
-          video.setAttribute('muted', '');
-          video.muted = true;
-        }
-      } catch (e) {
-        console.log("Video adjustment error:", e);
-      }
-    }
-
-    // حل المشكلة 2 و 3: نظام تتبع الزوار المحسن
     function getVisitorId() {
       let visitorId = localStorage.getItem('visitorId');
-      let sessionId = sessionStorage.getItem('sessionId');
       
       if (!visitorId) {
-        // زائر جديد تماماً
         visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9) + 
                    '_' + new Date().getTime();
         localStorage.setItem('visitorId', visitorId);
-        sessionStorage.setItem('sessionId', 'session_' + Date.now());
         
-        incrementVisitorCount(true);
-      } else if (!sessionId) {
-        // زائر له معرف ولكن ليس له جلسة نشطة (يعني زيارة جديدة)
-        sessionStorage.setItem('sessionId', 'session_' + Date.now());
-        incrementVisitorCount(false);
+        incrementVisitorCount();
       } else {
-        // زائر له جلسة نشطة (لا تعد زيارة جديدة)
         showVisitorCount();
       }
       
       return visitorId;
     }
 
-    function incrementVisitorCount(isNewVisitor) {
-      let count = localStorage.getItem('visitorCount') || 0;
-      count = parseInt(count);
-      
-      // زيادة العداد فقط إذا كان زائر جديد تماماً أو زيارة جديدة من نفس الزائر
-      if (isNewVisitor || !sessionStorage.getItem('counted')) {
-        count += 1;
+    function incrementVisitorCount() {
+      if (!sessionStorage.getItem('visited')) {
+        let count = localStorage.getItem('visitorCount') || 0;
+        count = parseInt(count) + 1;
         localStorage.setItem('visitorCount', count);
-        sessionStorage.setItem('counted', 'true');
+        sessionStorage.setItem('visited', 'true');
+        
+        animateCounter(count);
       }
-      
-      animateCounter(count);
     }
 
     function showVisitorCount() {
@@ -649,8 +595,8 @@
 
     function animateCounter(target) {
       const element = document.getElementById('visitorCount');
-      let current = parseInt(element.textContent) || 0;
-      const increment = Math.max(1, (target - current) / 30);
+      let current = 0;
+      const increment = target / 30;
       
       const timer = setInterval(() => {
         current += increment;
@@ -686,28 +632,7 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      // إظهار العين والعداد فور تحميل الصفحة
-      document.querySelector('.eye-counter').style.display = 'flex';
       getVisitorId();
-      
-      // ضبط الفيديو
-      adjustVideoSize();
-      
-      // إعادة ضبط الفيديو عند تغيير حجم النافذة
-      window.addEventListener('resize', adjustVideoSize);
-      window.addEventListener('orientationchange', adjustVideoSize);
-      
-      // محاولة تشغيل الفيديو على الجوالات عند النقر
-      if (/Mobi|Android/i.test(navigator.userAgent)) {
-        document.addEventListener('click', function() {
-          document.getElementById('bgVideo').play()
-            .then(() => {
-              console.log("Video started successfully on mobile");
-              adjustVideoSize(); // إعادة ضبط الحجم بعد التشغيل
-            })
-            .catch(e => console.log("Mobile video play failed:", e));
-        }, {once: true});
-      }
     });
 
     const usernameText = document.getElementById('usernameText');
@@ -782,15 +707,10 @@
       const main = document.getElementById('mainContent');
       main.style.display = 'flex';
       main.classList.add('show');
-      
-      // تشغيل الصوت والفيديو
       audio.play().catch(e => console.log("Audio play failed:", e));
       isAudioPlaying = true;
       document.querySelector('.audio-container').style.display = 'flex';
       document.getElementById('bgVideo').play().catch(e => console.log("Video play failed:", e));
-      
-      // تأكيد تحديث العداد
-      showVisitorCount();
     }
 
     function toggleAudio() {
@@ -884,6 +804,27 @@
       requestAnimationFrame(animateSnow);
     }
     animateSnow();
+    
+    function adjustVideoSize() {
+      const video = document.getElementById('bgVideo');
+      const windowRatio = window.innerWidth / window.innerHeight;
+      const videoRatio = 16 / 9;
+      
+      if (windowRatio > videoRatio) {
+        video.style.width = '100%';
+        video.style.height = 'auto';
+      } else {
+        video.style.width = 'auto';
+        video.style.height = '100%';
+      }
+    }
+    
+    window.addEventListener('resize', adjustVideoSize);
+    window.addEventListener('load', adjustVideoSize);
+    
+    document.addEventListener('click', function() {
+      document.getElementById('bgVideo').play().catch(e => console.log("Video play failed:", e));
+    });
     
     function handleViewport() {
       let viewport = document.querySelector("meta[name=viewport]");
