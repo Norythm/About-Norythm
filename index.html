@@ -67,6 +67,68 @@
       z-index: -2;
     }
     
+    /* أنماط العين الجديدة */
+    .eye-counter {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .eye-container {
+      position: relative;
+      width: 50px;
+      height: 30px;
+    }
+
+    .eye {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 60% 15% 60% 15% / 60% 40% 60% 40%;
+      border: 2px solid #281c8c;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(40, 28, 140, 0.5);
+    }
+
+    .pupil {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #281c8c;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .eyelid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #281c8c;
+      border-radius: 0 0 50% 50%;
+      top: -100%;
+      animation: blink 10s infinite;
+    }
+
+    .visitor-count {
+      font-family: 'Orbitron', sans-serif;
+      color: #281c8c;
+      font-size: 22px;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(40, 28, 140, 0.5);
+    }
+
+    @keyframes blink {
+      0%, 96%, 98%, 100% { top: -100%; }
+      97%, 99% { top: 0; }
+    }
+    
     @media (max-width: 768px) {
       #bgVideo {
         width: auto;
@@ -114,6 +176,20 @@
         white-space: normal !important;
         width: auto !important;
         max-width: 90% !important;
+      }
+      
+      .eye-container {
+        width: 40px;
+        height: 24px;
+      }
+      
+      .pupil {
+        width: 12px;
+        height: 12px;
+      }
+      
+      .visitor-count {
+        font-size: 18px;
       }
     }
     
@@ -419,6 +495,17 @@
   <div id="particles-js"></div>
   <div class="entry-text" onclick="enterSite()">Click to Enter</div>
   
+  <!-- عداد الزوار الجديد -->
+  <div class="eye-counter">
+    <div class="eye-container">
+      <div class="eye">
+        <div class="pupil"></div>
+        <div class="eyelid"></div>
+      </div>
+    </div>
+    <div class="visitor-count" id="visitorCount">0</div>
+  </div>
+  
   <div class="main" id="mainContent">
     <img src="https://i.postimg.cc/SKM2hCf6/21f57ed365f9dd7c5e50e8b4d03102e2.webp" class="avatar" alt="avatar">
     <div class="username-container" style="position: relative;">
@@ -464,6 +551,79 @@
   </audio>
 
   <script>
+    // نظام عد الزوار المحسن
+    function getVisitorId() {
+      let visitorId = localStorage.getItem('visitorId');
+      
+      if (!visitorId) {
+        // إنشاء معرف فريد للزائر
+        visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9) + 
+                   '_' + new Date().getTime();
+        localStorage.setItem('visitorId', visitorId);
+        
+        // زيادة العداد فقط إذا كان الزائر جديداً
+        incrementVisitorCount();
+      } else {
+        // عرض العدد الحالي بدون زيادة
+        showVisitorCount();
+      }
+      
+      return visitorId;
+    }
+
+    function incrementVisitorCount() {
+      // نستخدم sessionStorage لمنع العد عند التحديث
+      if (!sessionStorage.getItem('visited')) {
+        let count = localStorage.getItem('visitorCount') || 0;
+        count = parseInt(count) + 1;
+        localStorage.setItem('visitorCount', count);
+        sessionStorage.setItem('visited', 'true');
+        
+        // عرض العدد مع تأثير العد
+        animateCounter(count);
+      }
+    }
+
+    function showVisitorCount() {
+      let count = localStorage.getItem('visitorCount') || 0;
+      document.getElementById('visitorCount').textContent = count;
+    }
+
+    function animateCounter(target) {
+      const element = document.getElementById('visitorCount');
+      let current = 0;
+      const increment = target / 30;
+      
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          clearInterval(timer);
+          current = target;
+        }
+        element.textContent = Math.floor(current);
+      }, 50);
+    }
+
+    // متابعة حركة الماوس للعين
+    document.addEventListener('mousemove', (e) => {
+      const pupil = document.querySelector('.pupil');
+      const eye = document.querySelector('.eye');
+      const rect = eye.getBoundingClientRect();
+      
+      const eyeCenterX = rect.left + rect.width / 2;
+      const eyeCenterY = rect.top + rect.height / 2;
+      
+      const angleX = (e.clientX - eyeCenterX) / 20;
+      const angleY = (e.clientY - eyeCenterY) / 20;
+      
+      pupil.style.transform = `translate(calc(-50% + ${angleX}px), calc(-50% + ${angleY}px))`;
+    });
+
+    // تهيئة العداد عند التحميل
+    document.addEventListener('DOMContentLoaded', () => {
+      getVisitorId();
+    });
+
     const usernameText = document.getElementById('usernameText');
     const canvas = document.getElementById('usernameParticles');
     const ctx = canvas.getContext('2d');
