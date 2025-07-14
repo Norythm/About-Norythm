@@ -104,6 +104,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      transition: transform 0.1s ease-out;
     }
 
     .eyelid {
@@ -604,19 +605,33 @@
       }, 50);
     }
 
-    // متابعة حركة الماوس للعين
+    // متابعة حركة الماوس للعين - النسخة المحسنة
     document.addEventListener('mousemove', (e) => {
       const pupil = document.querySelector('.pupil');
       const eye = document.querySelector('.eye');
       const rect = eye.getBoundingClientRect();
       
+      // مركز العين
       const eyeCenterX = rect.left + rect.width / 2;
       const eyeCenterY = rect.top + rect.height / 2;
       
-      const angleX = (e.clientX - eyeCenterX) / 20;
-      const angleY = (e.clientY - eyeCenterY) / 20;
+      // حساب المسافة بين الماوس ومركز العين مع تحديد الحدود
+      const mouseX = Math.min(Math.max(e.clientX, rect.left), rect.right);
+      const mouseY = Math.min(Math.max(e.clientY, rect.top), rect.bottom);
       
-      pupil.style.transform = `translate(calc(-50% + ${angleX}px), calc(-50% + ${angleY}px))`;
+      // حساب النسبة المئوية للحركة داخل حدود العين
+      const percentX = (mouseX - eyeCenterX) / (rect.width / 3);
+      const percentY = (mouseY - eyeCenterY) / (rect.height / 3);
+      
+      // تحديد الحد الأقصى لحركة البؤبؤ (بحيث لا يخرج من العين)
+      const maxMoveX = 7;
+      const maxMoveY = 5;
+      
+      // حساب الحركة مع تطبيق الحدود
+      const moveX = percentX * maxMoveX;
+      const moveY = percentY * maxMoveY;
+      
+      pupil.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
     });
 
     // تهيئة العداد عند التحميل
