@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title id="pageTitle">About Norythm</title>
+  <title>Norythm</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Monoton&display=swap');
-    * { box-sizing: border-box; }
-    html, body {
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       margin: 0;
       padding: 0;
       font-family: 'Orbitron', sans-serif;
@@ -20,14 +26,14 @@
       min-width: 320px;
       min-height: 100vh;
     }
-    
+
     .bg-old-tv {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: 
+      background:
         linear-gradient(rgba(18, 16, 16, 0.1) 50%, rgba(0, 0, 0, 0.25) 50%),
         linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
       background-size: 100% 4px, 4px 100%;
@@ -36,12 +42,17 @@
       display: none;
       animation: tvFlicker 0.1s infinite alternate;
     }
-    
+
     @keyframes tvFlicker {
-      0% { opacity: 0.9; }
-      100% { opacity: 1; }
+      0% {
+        opacity: 0.9;
+      }
+
+      100% {
+        opacity: 1;
+      }
     }
-    
+
     .pre-entry-blur {
       position: fixed;
       top: 0;
@@ -52,129 +63,69 @@
       z-index: 998;
       display: block;
     }
-    
+
     #bgVideo {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       z-index: -2;
-    }
-    
-    .eye-counter {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 20;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000;
+      will-change: transform;
     }
 
-    .eye-container {
-      position: relative;
-      width: 50px;
-      height: 30px;
-    }
-
-    .eye {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: white;
-      border-radius: 60% 15% 60% 15% / 60% 40% 60% 40%;
-      border: 2px solid #281c8c;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(40, 28, 140, 0.5);
-    }
-
-    .pupil {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: #281c8c;
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease-out;
-    }
-
-    .eyelid {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: #281c8c;
-      border-radius: 0 0 50% 50%;
-      top: -100%;
-      animation: blink 10s infinite;
-    }
-
-    .visitor-count {
-      font-family: 'Orbitron', sans-serif;
-      color: #281c8c;
-      font-size: 22px;
-      font-weight: bold;
-      text-shadow: 0 0 5px rgba(40, 28, 140, 0.5);
-    }
-
-    @keyframes blink {
-      0%, 96%, 98%, 100% { top: -100%; }
-      97%, 99% { top: 0; }
-    }
-    
     @media (max-width: 768px) {
       #bgVideo {
-        width: auto;
+        width: 100%;
         height: 100%;
+        object-fit: cover;
       }
-      
+
       .main {
         padding: 20px 15px !important;
         max-width: 95vw !important;
         height: auto;
         margin-bottom: 40px;
       }
-      
+
       body {
         overflow-y: auto;
       }
-      
+
       .avatar {
         width: 120px !important;
         height: 120px !important;
       }
-      
+
       .username {
         font-size: 24px !important;
         white-space: normal !important;
       }
-      
+
       .description {
         font-size: 14px !important;
         max-width: 95% !important;
       }
-      
+
       .links a {
         width: 100% !important;
         max-width: 280px !important;
         padding: 10px 12px !important;
         font-size: 14px !important;
       }
-      
+
       .footer .location {
         font-size: 18px !important;
       }
-      
+
       .clock {
         font-size: 16px !important;
       }
-      
+
       .entry-text {
         font-size: 18px !important;
         padding: 10px 16px !important;
@@ -182,52 +133,39 @@
         width: auto !important;
         max-width: 90% !important;
       }
-      
-      .eye-container {
-        width: 40px;
-        height: 24px;
-      }
-      
-      .pupil {
-        width: 12px;
-        height: 12px;
-      }
-      
-      .visitor-count {
-        font-size: 18px;
-      }
-      
+
       .links {
         margin-bottom: 20px;
       }
     }
-    
+
     body::before {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent,
-        transparent 2px,
-        rgba(255, 255, 255, 0.02) 2px,
-        rgba(255, 255, 255, 0.02) 4px
-      );
+      background: repeating-linear-gradient(to bottom,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.02) 2px,
+          rgba(255, 255, 255, 0.02) 4px);
       z-index: 1;
     }
-    
+
     .entry-text {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       color: white;
       font-size: 24px;
       cursor: pointer;
       animation: blink 1s infinite;
       padding: 12px 22px;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0, 0, 0, 0.5);
       border: 1px solid #281c8c;
       border-radius: 14px;
       text-shadow: 0 0 10px #00f2ff;
@@ -238,10 +176,19 @@
       user-select: none;
       white-space: nowrap;
     }
+
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
     }
+
     .main {
       display: none;
       flex-direction: column;
@@ -257,10 +204,19 @@
       position: relative;
       margin-bottom: 40px;
     }
+
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(80px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(80px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     .avatar {
       width: 180px;
       height: 180px;
@@ -270,15 +226,18 @@
       transition: transform 0.3s ease;
       object-fit: cover;
     }
+
     .avatar:hover {
       transform: scale(1.05);
     }
+
     .username-container {
       position: relative;
       display: inline-block;
       z-index: 10;
       margin-top: 10px;
     }
+
     .username {
       font-size: 36px;
       font-weight: bold;
@@ -291,9 +250,11 @@
       white-space: nowrap;
       transition: text-shadow 0.3s ease;
     }
+
     .username:hover {
       text-shadow: 0 0 10px #281c8c;
     }
+
     .description {
       color: white;
       text-align: center;
@@ -301,14 +262,16 @@
       font-size: 18px;
       z-index: 2;
       word-break: break-word;
-      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       transition: transform 0.3s ease;
       margin-top: 5px;
       max-width: 80%;
     }
+
     .description:hover {
       transform: scale(1.05);
     }
+
     .links {
       display: flex;
       flex-direction: column;
@@ -317,11 +280,12 @@
       width: 100%;
       align-items: center;
     }
+
     .links a {
       display: flex;
       align-items: center;
       gap: 10px;
-      background-color: rgba(0,0,0,0.3);
+      background-color: rgba(0, 0, 0, 0.3);
       color: white;
       text-decoration: none;
       padding: 12px 16px;
@@ -329,14 +293,16 @@
       border-radius: 12px;
       transition: all 0.3s ease;
       z-index: 2;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       font-size: 16px;
     }
+
     .links a:hover {
-      background-color: rgba(255,255,255,0.15);
+      background-color: rgba(255, 255, 255, 0.15);
       transform: scale(1.05);
       color: #281c8c;
     }
+
     .audio-container {
       position: fixed;
       top: 20px;
@@ -355,11 +321,13 @@
       cursor: pointer;
       border: 1px solid rgba(40, 28, 140, 0.5);
     }
+
     .audio-container:hover {
       width: 180px;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 12px;
     }
+
     .audio-container img {
       width: 32px;
       height: 32px;
@@ -369,6 +337,7 @@
       flex-shrink: 0;
       z-index: 2;
     }
+
     input[type=range] {
       -webkit-appearance: none;
       -moz-appearance: none;
@@ -386,6 +355,7 @@
       background-position: left bottom;
       z-index: 2;
     }
+
     .audio-container:hover input[type=range] {
       width: 100px;
       opacity: 1;
@@ -393,6 +363,7 @@
       background-size: 200% 100%;
       background-position: right bottom;
     }
+
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -408,6 +379,7 @@
       transform: translateY(-50%);
       z-index: 10;
     }
+
     input[type=range]::-moz-range-thumb {
       width: 14px;
       height: 14px;
@@ -421,17 +393,21 @@
       transform: translateY(-50%);
       z-index: 10;
     }
+
     input[type=range]:focus {
       outline: none;
     }
+
     input[type=range]::-webkit-slider-runnable-track {
       height: 4px;
       border-radius: 5px;
     }
+
     input[type=range]::-moz-range-track {
       height: 4px;
       border-radius: 5px;
     }
+
     .footer {
       margin-top: 30px;
       width: 100%;
@@ -441,12 +417,14 @@
       padding: 0 12px;
       position: relative;
     }
+
     .location-clock-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
     }
+
     .footer .location {
       display: flex;
       align-items: center;
@@ -457,16 +435,20 @@
       font-family: 'Orbitron', sans-serif;
       transition: all 0.3s ease;
     }
+
     .footer .location:hover {
       color: white;
     }
+
     .footer .location img {
       filter: brightness(1.5);
       transition: all 0.3s ease;
     }
+
     .footer .location:hover img {
       filter: brightness(2);
     }
+
     .clock {
       color: #d3d3d3;
       font-size: 22px;
@@ -475,53 +457,63 @@
       letter-spacing: 1px;
       transition: all 0.3s ease;
     }
+
     .clock:hover {
       color: white;
     }
+
     .typing-effect {
       overflow: hidden;
       white-space: nowrap;
       border-right: 2px solid #281c8c;
       animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
     }
+
     @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+      from {
+        width: 0
+      }
+
+      to {
+        width: 100%
+      }
     }
+
     @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: #281c8c }
+
+      from,
+      to {
+        border-color: transparent
+      }
+
+      50% {
+        border-color: #281c8c
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="bg-old-tv" id="bgOldTv"></div>
   <div class="pre-entry-blur" id="preEntryBlur"></div>
-  
+
   <video autoplay muted loop playsinline id="bgVideo" preload="auto">
     <source src="video/rhythm-silver-wolf-honkai-star-rail-moewalls-com.mp4" type="video/mp4">
+    <source src="video/rhythm-silver-wolf-honkai-star-rail-moewalls-com.webm" type="video/webm">
+    Your browser does not support the video tag.
   </video>
-  
+
   <div id="particles-js"></div>
   <div class="entry-text" onclick="enterSite()">Click to Enter</div>
-  
-  <div class="eye-counter">
-    <div class="eye-container">
-      <div class="eye">
-        <div class="pupil"></div>
-        <div class="eyelid"></div>
-      </div>
-    </div>
-    <div class="visitor-count" id="visitorCount">0</div>
-  </div>
-  
+
   <div class="main" id="mainContent">
     <img src="https://i.postimg.cc/SKM2hCf6/21f57ed365f9dd7c5e50e8b4d03102e2.webp" class="avatar" alt="avatar">
     <div class="username-container" style="position: relative;">
       <div class="username typing-effect" id="usernameText">Norythm</div>
       <canvas id="usernameParticles" style="position:absolute; top:0; left:0; pointer-events:none; z-index:9;"></canvas>
     </div>
-    <div class="description">"Lack of attention and lack of appreciation perpetuates the feeling of loneliness and depression"</div>
+    <div class="description">"Lack of attention and lack of appreciation perpetuates the feeling of loneliness and
+      depression"</div>
     <div class="links">
       <a href="https://discord.com/users/892082362425425981" target="_blank">
         <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" width="20" alt="discord">Discord
@@ -533,10 +525,13 @@
         <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" width="20" alt="github">GitHub
       </a>
       <a href="https://www.roblox.com/users/2631470509/profile" target="_blank">
-        <img src="https://simpleicons.org/icons/roblox.svg" width="20" alt="roblox" style="filter: brightness(0) invert(1);"> Roblox
+        <img src="https://simpleicons.org/icons/roblox.svg" width="20" alt="roblox"
+          style="filter: brightness(0) invert(1);"> Roblox
       </a>
       <a href="https://steamcommunity.com/profiles/76561199547438865/" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png" width="20" alt="steam">Steam
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png"
+          width="20" alt="steam">Steam
       </a>
     </div>
     <div class="footer">
@@ -549,150 +544,73 @@
       </div>
     </div>
   </div>
-  
+
   <div class="audio-container" title="Toggle Audio">
-    <img src="https://cdn-icons-png.flaticon.com/512/727/727269.png" id="audioIcon" onclick="toggleAudio()" alt="audio icon">
+    <img src="https://cdn-icons-png.flaticon.com/512/727/727269.png" id="audioIcon" onclick="toggleAudio()"
+      alt="audio icon">
     <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" aria-label="Volume control">
   </div>
-  
+
   <audio id="bgAudio" loop>
     <source src="assets/music/Farazi-Dobro-Vecer-_Remastered_.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    function getVisitorId() {
-      let visitorId = localStorage.getItem('visitorId');
-      
-      if (!visitorId) {
-        visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9) + 
-                   '_' + new Date().getTime();
-        localStorage.setItem('visitorId', visitorId);
-        
-        incrementVisitorCount();
-      } else {
-        showVisitorCount();
-      }
-      
-      return visitorId;
-    }
+    function optimizeVideo() {
+      const video = document.getElementById('bgVideo');
 
-    function incrementVisitorCount() {
-      if (!sessionStorage.getItem('visited')) {
-        let count = localStorage.getItem('visitorCount') || 0;
-        count = parseInt(count) + 1;
-        localStorage.setItem('visitorCount', count);
-        sessionStorage.setItem('visited', 'true');
-        
-        animateCounter(count);
-      }
-    }
+      video.playsInline = true;
+      video.muted = true;
+      video.defaultMuted = true;
 
-    function showVisitorCount() {
-      let count = localStorage.getItem('visitorCount') || 0;
-      document.getElementById('visitorCount').textContent = count;
-    }
+      video.setAttribute('playsinline', '');
+      video.setAttribute('muted', '');
+      video.setAttribute('autoplay', '');
+      video.setAttribute('loop', '');
 
-    function animateCounter(target) {
-      const element = document.getElementById('visitorCount');
-      let current = 0;
-      const increment = target / 30;
-      
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          clearInterval(timer);
-          current = target;
+      video.style.transform = 'translateZ(0)';
+      video.style.backfaceVisibility = 'hidden';
+      video.style.perspective = '1000px';
+
+      function resizeVideo() {
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const videoRatio = 16 / 9;
+
+        const windowRatio = windowWidth / windowHeight;
+
+        if (windowRatio > videoRatio) {
+          video.style.width = '100%';
+          video.style.height = 'auto';
+          video.style.left = '0';
+          video.style.top = '50%';
+          video.style.transform = 'translateY(-50%) translateZ(0)';
+        } else {
+          video.style.width = 'auto';
+          video.style.height = '100%';
+          video.style.left = '50%';
+          video.style.top = '0';
+          video.style.transform = 'translateX(-50%) translateZ(0)';
         }
-        element.textContent = Math.floor(current);
-      }, 50);
-    }
+      }
+      resizeVideo();
+      window.addEventListener('resize', resizeVideo);
+      window.addEventListener('orientationchange', resizeVideo);
 
-    document.addEventListener('mousemove', (e) => {
-      const pupil = document.querySelector('.pupil');
-      const eye = document.querySelector('.eye');
-      const rect = eye.getBoundingClientRect();
-      
-      const eyeCenterX = rect.left + rect.width / 2;
-      const eyeCenterY = rect.top + rect.height / 2;
-      
-      const mouseX = Math.min(Math.max(e.clientX, rect.left), rect.right);
-      const mouseY = Math.min(Math.max(e.clientY, rect.top), rect.bottom);
-      
-      const percentX = (mouseX - eyeCenterX) / (rect.width / 3);
-      const percentY = (mouseY - eyeCenterY) / (rect.height / 3);
-      
-      const maxMoveX = 7;
-      const maxMoveY = 5;
-      
-      const moveX = percentX * maxMoveX;
-      const moveY = percentY * maxMoveY;
-      
-      pupil.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)`;
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      getVisitorId();
-    });
-
-    const usernameText = document.getElementById('usernameText');
-    const canvas = document.getElementById('usernameParticles');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      const rect = usernameText.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      canvas.style.top = '0px';
-      canvas.style.left = '0px';
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    const particles = [];
-    const maxParticles = 70;
-
-    function randomRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    function createParticle() {
-      return {
-        x: randomRange(0, canvas.width),
-        y: randomRange(0, canvas.height),
-        radius: randomRange(0.5, 1.2),
-        speedX: randomRange(-0.15, 0.15),
-        speedY: randomRange(-0.15, 0.15),
-        opacity: randomRange(0.2, 0.6),
-        opacityChange: 0.005 * (Math.random() < 0.5 ? 1 : -1),
-        color: '#281c8c'
+      const playVideo = () => {
+        video.play().then(() => {
+          console.log('Video playing smoothly');
+        }).catch(error => {
+          console.log('Video play failed, retrying...', error);
+          setTimeout(playVideo, 500);
+        });
       };
-    }
 
-    for (let i = 0; i < maxParticles; i++) {
-      particles.push(createParticle());
-    }
+      playVideo();
 
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        p.opacity += p.opacityChange;
-        
-        if (p.opacity > 0.6) p.opacity = 0.6;
-        if (p.opacity < 0.2) p.opacity = 0.2;
-        
-        if (p.x < 0 || p.x > canvas.width) p.speedX *= -0.5;
-        if (p.y < 0 || p.y > canvas.height) p.speedY *= -0.5;
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(40, 28, 140, ${p.opacity})`;
-        ctx.fill();
-      });
-      requestAnimationFrame(animateParticles);
+      document.addEventListener('click', playVideo, { once: true });
     }
-    animateParticles();
+    document.addEventListener('DOMContentLoaded', optimizeVideo);
 
     const audio = document.getElementById('bgAudio');
     const audioIcon = document.getElementById('audioIcon');
@@ -745,6 +663,66 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    const usernameText = document.getElementById('usernameText');
+    const canvas = document.getElementById('usernameParticles');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      const rect = usernameText.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      canvas.style.top = '0px';
+      canvas.style.left = '0px';
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const particles = [];
+    const maxParticles = 70;
+
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function createParticle() {
+      return {
+        x: randomRange(0, canvas.width),
+        y: randomRange(0, canvas.height),
+        radius: randomRange(0.5, 1.2),
+        speedX: randomRange(-0.15, 0.15),
+        speedY: randomRange(-0.15, 0.15),
+        opacity: randomRange(0.2, 0.6),
+        opacityChange: 0.005 * (Math.random() < 0.5 ? 1 : -1),
+        color: '#281c8c'
+      };
+    }
+
+    for (let i = 0; i < maxParticles; i++) {
+      particles.push(createParticle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.opacity += p.opacityChange;
+
+        if (p.opacity > 0.6) p.opacity = 0.6;
+        if (p.opacity < 0.2) p.opacity = 0.2;
+
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -0.5;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -0.5;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(40, 28, 140, ${p.opacity})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
 
     const snowCanvas = document.createElement('canvas');
     snowCanvas.id = 'snowCanvas';
@@ -803,56 +781,7 @@
       requestAnimationFrame(animateSnow);
     }
     animateSnow();
-    
-    function adjustVideoSize() {
-      const video = document.getElementById('bgVideo');
-      const windowRatio = window.innerWidth / window.innerHeight;
-      const videoRatio = 16 / 9;
-      
-      if (windowRatio > videoRatio) {
-        video.style.width = '100%';
-        video.style.height = 'auto';
-      } else {
-        video.style.width = 'auto';
-        video.style.height = '100%';
-      }
-    }
-    
-    window.addEventListener('resize', adjustVideoSize);
-    window.addEventListener('load', adjustVideoSize);
-    
-    document.addEventListener('click', function() {
-      document.getElementById('bgVideo').play().catch(e => console.log("Video play failed:", e));
-    });
-    
-    function handleViewport() {
-      let viewport = document.querySelector("meta[name=viewport]");
-      if (window.innerWidth <= 768) {
-        viewport.setAttribute("content", "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no");
-      } else {
-        viewport.setAttribute("content", "width=device-width, initial-scale=1.0");
-      }
-    }
-    
-    function setupMobileScrolling() {
-      if (window.innerWidth <= 768) {
-        document.body.style.overflowY = 'auto';
-        document.body.style.height = 'auto';
-        
-        const video = document.getElementById('bgVideo');
-        video.style.position = 'fixed';
-        video.style.height = '100%';
-        video.style.width = 'auto';
-        
-        const mainContent = document.getElementById('mainContent');
-        mainContent.style.minHeight = 'calc(100vh - 40px)';
-      }
-    }
-
-    window.addEventListener('resize', handleViewport);
-    window.addEventListener('load', handleViewport);
-    window.addEventListener('load', setupMobileScrolling);
-    window.addEventListener('resize', setupMobileScrolling);
   </script>
 </body>
+
 </html>
