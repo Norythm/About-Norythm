@@ -498,7 +498,8 @@
   <div class="pre-entry-blur" id="preEntryBlur"></div>
 
   <video autoplay muted loop playsinline id="bgVideo" preload="auto">
-    <source src="sangonomiya-kokomi-genshin-impact-moewalls-com.mp4" type="video/mp4">
+    <source src="video/rhythm-silver-wolf-honkai-star-rail-moewalls-com.mp4" type="video/mp4">
+    <source src="video/rhythm-silver-wolf-honkai-star-rail-moewalls-com.webm" type="video/webm">
     Your browser does not support the video tag.
   </video>
 
@@ -551,24 +552,12 @@
   </div>
 
   <audio id="bgAudio" loop>
-    <source src="assets/music/Farazi-Dobro-Vecer-(Remastered).mp3" type="audio/mpeg">
+    <source src="assets/music/Farazi-Dobro-Vecer-_Remastered_.mp3" type="audio/mpeg">
   </audio>
 
   <script>
     function optimizeVideo() {
       const video = document.getElementById('bgVideo');
-      
-      video.addEventListener('loadeddata', function() {
-        console.log('Video loaded successfully');
-      });
-      
-      video.addEventListener('error', function(e) {
-        console.error('Error loading video:', e);
-        const sources = video.getElementsByTagName('source');
-        if (sources.length > 0) {
-          console.log('Trying alternative video source...');
-        }
-      });
 
       video.playsInline = true;
       video.muted = true;
@@ -604,7 +593,6 @@
           video.style.transform = 'translateX(-50%) translateZ(0)';
         }
       }
-      
       resizeVideo();
       window.addEventListener('resize', resizeVideo);
       window.addEventListener('orientationchange', resizeVideo);
@@ -618,16 +606,11 @@
         });
       };
 
-      document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(playVideo, 100);
-      });
+      playVideo();
 
-      document.addEventListener('click', function() {
-        playVideo();
-      }, { once: true });
+      document.addEventListener('click', playVideo, { once: true });
     }
-
-    optimizeVideo();
+    document.addEventListener('DOMContentLoaded', optimizeVideo);
 
     const audio = document.getElementById('bgAudio');
     const audioIcon = document.getElementById('audioIcon');
