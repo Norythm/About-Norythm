@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Norythm</title>
-<link rel="stylesheet" href="Style.css">
+  <link rel="stylesheet" href="Style.css">
 </head>
 
 <body>
@@ -67,6 +67,23 @@
   <audio id="bgAudio" loop>
     <source src="assets/music/Farazi-Dobro-Vecer-_Remastered_.mp3" type="audio/mpeg">
   </audio>
+
+  <div id="chatButton">💬</div>
+
+  <div id="chatPopup">
+    <div class="chat-header">
+      <span>Send a Message</span>
+      <button id="closeChat">✕</button>
+    </div>
+
+    <textarea id="chatMessage" placeholder="Type your message here..."></textarea>
+
+    <button id="sendChat">Send To Norythm</button>
+
+    <p id="cooldownText"></p>
+  </div>
+
+
   <script src="index.js"></script>
 </body>
 

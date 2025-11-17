@@ -147,27 +147,42 @@
     z-index: 1;
     }
 
-    .entry-text {
+   .entry-text {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: white;
+    color: #d3d3d3;
     font-size: 24px;
     cursor: pointer;
-    animation: blink 1s infinite;
-    padding: 12px 22px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid #281c8c;
+    padding: 14px 28px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 2px solid #281c8c;
     border-radius: 14px;
-    text-shadow: 0 0 10px #00f2ff;
-    box-shadow: 0 0 20px #281c8c88;
-    z-index: 1000;
-    width: max-content;
-    text-align: center;
-    user-select: none;
+
+    box-shadow: 
+        0 0 15px rgba(40, 28, 140, 0.6),
+        0 0 30px rgba(40, 28, 140, 0.3);
+
+    text-shadow: 0 0 8px rgba(40, 28, 140, 0.9);
+
     white-space: nowrap;
-    }
+    user-select: none;
+    z-index: 1000;
+
+    transition: all 0.3s ease;
+    animation: blink 1.2s infinite;
+}
+
+.entry-text:hover {
+    background: rgba(40, 28, 140, 0.3);
+    color: white;
+
+    box-shadow: 
+        0 0 20px rgba(40, 28, 140, 0.8),
+        0 0 40px rgba(40, 28, 140, 0.5);
+}
+
 
     @keyframes blink {
 

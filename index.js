@@ -22,17 +22,17 @@ function optimizeVideo() {
         const windowRatio = windowWidth / windowHeight;
 
         if (windowRatio > videoRatio) {
-        video.style.width = '100%';
-        video.style.height = 'auto';
-        video.style.left = '0';
-        video.style.top = '50%';
-        video.style.transform = 'translateY(-50%) translateZ(0)';
+            video.style.width = '100%';
+            video.style.height = 'auto';
+            video.style.left = '0';
+            video.style.top = '50%';
+            video.style.transform = 'translateY(-50%) translateZ(0)';
         } else {
-        video.style.width = 'auto';
-        video.style.height = '100%';
-        video.style.left = '50%';
-        video.style.top = '0';
-        video.style.transform = 'translateX(-50%) translateZ(0)';
+            video.style.width = 'auto';
+            video.style.height = '100%';
+            video.style.left = '50%';
+            video.style.top = '0';
+            video.style.transform = 'translateX(-50%) translateZ(0)';
         }
     }
     resizeVideo();
@@ -41,25 +41,25 @@ function optimizeVideo() {
 
     const playVideo = () => {
         video.play().then(() => {
-        console.log('Video playing smoothly');
+            console.log('Video playing smoothly');
         }).catch(error => {
-        console.log('Video play failed, retrying...', error);
-        setTimeout(playVideo, 500);
+            console.log('Video play failed, retrying...', error);
+            setTimeout(playVideo, 500);
         });
     };
 
     playVideo();
 
     document.addEventListener('click', playVideo, { once: true });
-    }
-    document.addEventListener('DOMContentLoaded', optimizeVideo);
+}
+document.addEventListener('DOMContentLoaded', optimizeVideo);
 
-    const audio = document.getElementById('bgAudio');
-    const audioIcon = document.getElementById('audioIcon');
-    const volumeSlider = document.getElementById('volumeSlider');
-    let isAudioPlaying = false;
+const audio = document.getElementById('bgAudio');
+const audioIcon = document.getElementById('audioIcon');
+const volumeSlider = document.getElementById('volumeSlider');
+let isAudioPlaying = false;
 
-    function enterSite() {
+function enterSite() {
     document.getElementById('preEntryBlur').style.display = 'none';
     document.getElementById('bgOldTv').style.display = 'block';
     document.querySelector('.entry-text').style.display = 'none';
@@ -70,9 +70,9 @@ function optimizeVideo() {
     isAudioPlaying = true;
     document.querySelector('.audio-container').style.display = 'flex';
     document.getElementById('bgVideo').play().catch(e => console.log("Video play failed:", e));
-    }
+}
 
-    function toggleAudio() {
+function toggleAudio() {
     if (isAudioPlaying) {
         audio.pause();
         audioIcon.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23281c8c'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>";
@@ -83,16 +83,16 @@ function optimizeVideo() {
         isAudioPlaying = true;
     }
     audioIcon.style.filter = "brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(745%) hue-rotate(227deg) brightness(87%) contrast(93%)";
-    }
+}
 
-    volumeSlider.addEventListener('input', () => {
+volumeSlider.addEventListener('input', () => {
     audio.volume = volumeSlider.value;
     const val = volumeSlider.value;
-      const percent = val * 100;
+    const percent = val * 100;
     volumeSlider.style.background = `linear-gradient(to right, #281c8c 0%, #281c8c ${percent}%, #686868 ${percent}%, #686868 100%)`;
-    });
+});
 
-    function updateClock() {
+function updateClock() {
     const clock = document.getElementById("clock");
     const now = new Date();
     let hours = now.getHours();
@@ -102,32 +102,32 @@ function optimizeVideo() {
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     clock.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+}
+setInterval(updateClock, 1000);
+updateClock();
 
-    const usernameText = document.getElementById('usernameText');
-    const canvas = document.getElementById('usernameParticles');
-    const ctx = canvas.getContext('2d');
+const usernameText = document.getElementById('usernameText');
+const canvas = document.getElementById('usernameParticles');
+const ctx = canvas.getContext('2d');
 
-    function resizeCanvas() {
+function resizeCanvas() {
     const rect = usernameText.getBoundingClientRect();
     canvas.width = rect.width;
     canvas.height = rect.height;
     canvas.style.top = '0px';
     canvas.style.left = '0px';
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-    const particles = [];
-    const maxParticles = 70;
+const particles = [];
+const maxParticles = 70;
 
-    function randomRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
+function randomRange(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
-    function createParticle() {
+function createParticle() {
     return {
         x: randomRange(0, canvas.width),
         y: randomRange(0, canvas.height),
@@ -138,13 +138,13 @@ function optimizeVideo() {
         opacityChange: 0.005 * (Math.random() < 0.5 ? 1 : -1),
         color: '#281c8c'
     };
-    }
+}
 
-    for (let i = 0; i < maxParticles; i++) {
+for (let i = 0; i < maxParticles; i++) {
     particles.push(createParticle());
-    }
+}
 
-    function animateParticles() {
+function animateParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => {
         p.x += p.speedX;
@@ -163,35 +163,35 @@ function optimizeVideo() {
         ctx.fill();
     });
     requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
+}
+animateParticles();
 
-    const snowCanvas = document.createElement('canvas');
-    snowCanvas.id = 'snowCanvas';
-    snowCanvas.style.position = 'fixed';
-    snowCanvas.style.top = '0';
-    snowCanvas.style.left = '0';
-    snowCanvas.style.pointerEvents = 'none';
-    snowCanvas.style.zIndex = '2';
-    document.body.appendChild(snowCanvas);
+const snowCanvas = document.createElement('canvas');
+snowCanvas.id = 'snowCanvas';
+snowCanvas.style.position = 'fixed';
+snowCanvas.style.top = '0';
+snowCanvas.style.left = '0';
+snowCanvas.style.pointerEvents = 'none';
+snowCanvas.style.zIndex = '2';
+document.body.appendChild(snowCanvas);
 
-    const snowCtx = snowCanvas.getContext('2d');
-    let width = snowCanvas.width = window.innerWidth;
-    let height = snowCanvas.height = window.innerHeight;
+const snowCtx = snowCanvas.getContext('2d');
+let width = snowCanvas.width = window.innerWidth;
+let height = snowCanvas.height = window.innerHeight;
 
-    window.addEventListener('resize', () => {
+window.addEventListener('resize', () => {
     width = snowCanvas.width = window.innerWidth;
     height = snowCanvas.height = window.innerHeight;
-    });
+});
 
-    const snowflakes = Array.from({ length: 100 }).map(() => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 3 + 1,
+const snowflakes = Array.from({ length: 100 }).map(() => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    r: Math.random() * 3 + 1,
     d: Math.random() + 1,
-    }));
+}));
 
-    function drawSnow() {
+function drawSnow() {
     snowCtx.clearRect(0, 0, width, height);
     snowCtx.fillStyle = "white";
     snowCtx.beginPath();
@@ -202,24 +202,97 @@ function optimizeVideo() {
     }
     snowCtx.fill();
     updateSnow();
-    }
+}
 
-    let angle = 0;
-    function updateSnow() {
+let angle = 0;
+function updateSnow() {
     angle += 0.01;
     for (let i = 0; i < snowflakes.length; i++) {
         const f = snowflakes[i];
         f.y += Math.pow(f.d, 2) + 1;
         f.x += Math.sin(angle) * 2;
         if (f.y > height) {
-        f.y = -10;
-          f.x = Math.random() * width;
+            f.y = -10;
+            f.x = Math.random() * width;
         }
     }
-    }
+}
 
-    function animateSnow() {
+function animateSnow() {
     drawSnow();
     requestAnimationFrame(animateSnow);
+}
+animateSnow();
+
+const WEBHOOK_URL = "https://canary.discord.com/api/webhooks/1440015429769760768/3jAl6KurT7-CU9L-Vv_VTTjB-TpeBOMVhsl5iAw-PfPBVzWiVh_74fCFcXytF83NPCb6"; 
+let cooldown = false;
+let cooldownTime = 10;
+let cooldownTimer = null;
+
+const chatButton = document.getElementById("chatButton");
+const chatPopup = document.getElementById("chatPopup");
+const closeChat = document.getElementById("closeChat");
+const sendChat = document.getElementById("sendChat");
+const chatMessage = document.getElementById("chatMessage");
+const cooldownText = document.getElementById("cooldownText");
+
+chatButton.addEventListener("click", () => {
+    chatPopup.style.display = "flex";
+});
+
+closeChat.addEventListener("click", () => {
+    chatPopup.style.display = "none";
+});
+
+function startCooldown() {
+    cooldown = true;
+    let left = cooldownTime;
+
+    cooldownText.textContent = `Cooldown: ${left}s`;
+
+    cooldownTimer = setInterval(() => {
+        left--;
+        cooldownText.textContent = `Cooldown: ${left}s`;
+
+        if (left <= 0) {
+            cooldown = false;
+            cooldownText.textContent = "";
+            clearInterval(cooldownTimer);
+        }
+    }, 1000);
+}
+
+sendChat.addEventListener("click", () => {
+    const msg = chatMessage.value.trim();
+    if (!msg) return;
+
+    if (cooldown) {
+        cooldownText.style.color = "red";
+        cooldownText.textContent = "Please wait for cooldown!";
+        setTimeout(() => cooldownText.style.color = "#d4d4d4", 1000);
+        return;
     }
-    animateSnow();
+
+    sendChat.disabled = true;
+    sendChat.textContent = "Sending...";
+
+    fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ content: msg })
+    })
+    .then(() => {
+        chatMessage.value = "";
+        sendChat.textContent = "Sent!";
+        setTimeout(() => {
+            sendChat.disabled = false;
+            sendChat.textContent = "Send";
+        }, 900);
+
+        startCooldown();
+    })
+    .catch(() => {
+        sendChat.disabled = false;
+        sendChat.textContent = "Send";
+    });
+});
